@@ -49,13 +49,13 @@ clf = HistGradientBoostingClassifier(learning_rate=0.2, max_depth=20, max_leaf_n
                                      random_state=80)
 clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
-print("Classification report")
+print("Classification report HistGradientBoostingClassifier")
 print(classification_report(y_test, y_pred))
 
 macro_f1 = f1_score(y_test, y_pred, average='macro')
 micro_f1 = f1_score(y_test, y_pred, average='micro')
-print(f"Macro F1 Score Boosting: {macro_f1}")
-print(f"Micro F1 Score Boosting: {micro_f1}")
+print(f"Macro F1 Score HistGradientBoostingClassifier: {macro_f1}")
+print(f"Micro F1 Score HistGradientBoostingClassifier: {micro_f1}")
 cm = confusion_matrix(y_test, y_pred)
 class_labels = ['Stage I', 'Stage II', 'Stage III', 'Stage IV']
 plt.figure(figsize=(10, 8))
@@ -71,13 +71,13 @@ clf = AdaBoostClassifier(learning_rate=0.1, estimator=dt, random_state=80)
 clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
 
-print("Classification report")
+print("Classification report AdaBoostClassifier")
 print(classification_report(y_test, y_pred))
 
 macro_f1 = f1_score(y_test, y_pred, average='macro')
 micro_f1 = f1_score(y_test, y_pred, average='micro')
-print(f"Macro F1 Score Boosting: {macro_f1}")
-print(f"Micro F1 Score Boosting: {micro_f1}")
+print(f"Macro F1 Score AdaBoostClassifier: {macro_f1}")
+print(f"Micro F1 Score AdaBoostClassifier: {micro_f1}")
 cm = confusion_matrix(y_test, y_pred)
 class_labels = ['Stage I', 'Stage II', 'Stage III', 'Stage IV']
 plt.figure(figsize=(10, 8))
@@ -93,13 +93,13 @@ clf = ExtraTreesClassifier(bootstrap=True, max_depth=30, min_samples_leaf=4, min
 clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
 
-print("Classification report")
+print("Classification report ExtraTreesClassifier")
 print(classification_report(y_test, y_pred))
 
 macro_f1 = f1_score(y_test, y_pred, average='macro')
 micro_f1 = f1_score(y_test, y_pred, average='micro')
-print(f"Macro F1 Score Boosting: {macro_f1}")
-print(f"Micro F1 Score Boosting: {micro_f1}")
+print(f"Macro F1 Score ExtraTreesClassifier: {macro_f1}")
+print(f"Micro F1 Score ExtraTreesClassifier: {micro_f1}")
 cm = confusion_matrix(y_test, y_pred)
 class_labels = ['Stage I', 'Stage II', 'Stage III', 'Stage IV']
 plt.figure(figsize=(10, 8))
