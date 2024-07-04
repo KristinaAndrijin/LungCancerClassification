@@ -95,9 +95,6 @@ scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
-# pca = PCA(n_components=0.9)
-# X_train = pca.fit_transform(X_train)
-# X_test = pca.transform(X_test)
 print(np.shape(X_train))  
 
 classifier = SVC(kernel='rbf', gamma='auto', C=5, random_state=42)
@@ -117,4 +114,4 @@ sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=class_labels, yti
 plt.xlabel('Predicted')
 plt.ylabel('Actual')
 plt.title('Confusion Matrix')
-plt.show()
+plt.savefig("confusion_matrix.png")
