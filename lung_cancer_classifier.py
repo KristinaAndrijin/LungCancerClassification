@@ -6,12 +6,29 @@ from sklearn.svm import SVC
 from sklearn.metrics import classification_report, f1_score
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import confusion_matrix
+from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 import seaborn as sns
 
 df = pd.read_csv('lung_cancer_data.csv')
 
-categorical_columns = ['Gender','Smoking_History','Tumor_Location','Stage','Treatment','Ethnicity','Insurance_Type','Family_History','Comorbidity_Diabetes','Comorbidity_Hypertension','Comorbidity_Heart_Disease','Comorbidity_Chronic_Lung_Disease','Comorbidity_Kidney_Disease','Comorbidity_Autoimmune_Disease','Comorbidity_Other']
+# comorbidity_columns = ['Comorbidity_Diabetes', 'Comorbidity_Hypertension', 'Comorbidity_Heart_Disease', 
+#                        'Comorbidity_Chronic_Lung_Disease', 'Comorbidity_Kidney_Disease', 
+#                        'Comorbidity_Autoimmune_Disease', 'Comorbidity_Other']
+
+# for column in comorbidity_columns:
+#     df[column] = df[column].map({'Yes': 1, 'No': 0})
+
+# df['Comorbidities_Count'] = df[comorbidity_columns].sum(axis=1)
+# df = df.drop(comorbidity_columns, axis=1)
+# print(df['Comorbidities_Count'])
+
+categorical_columns = ['Gender', 'Smoking_History', 'Tumor_Location', 'Stage', 'Treatment', 
+                       'Ethnicity', 'Insurance_Type', 'Family_History',
+                       'Comorbidity_Diabetes', 'Comorbidity_Hypertension', 'Comorbidity_Heart_Disease', 
+                        'Comorbidity_Chronic_Lung_Disease', 'Comorbidity_Kidney_Disease', 
+                        'Comorbidity_Autoimmune_Disease', 'Comorbidity_Other'
+                        ]
 label_encoders = {}
 for column in categorical_columns:
     label_encoders[column] = LabelEncoder()
@@ -23,6 +40,16 @@ X = df.drop('Stage', axis=1)
 y = df['Stage']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+pca = PCA(n_components=0.95)
+X_train = pca.fit_transform(X_train)
+X_test = pca.transform(X_test)
+print(X_train)  
 
 classifier = RandomForestClassifier(n_estimators=100, random_state=42)
 classifier.fit(X_train, y_train)
