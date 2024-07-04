@@ -78,7 +78,8 @@ other_columns = [
     # "Performance_Status",	
     # "Blood_Pressure_Systolic",	
     # "Blood_Pressure_Diastolic",
-    # "Blood_Pressure_Pulse"
+    # "Blood_Pressure_Pulse",
+    # "Comorbidities_Count"
 
 ]
 df=df.drop(other_columns, axis=1)
@@ -97,7 +98,7 @@ X_test = scaler.transform(X_test)
 
 print(np.shape(X_train))  
 
-classifier = SVC(kernel='rbf', gamma='auto', C=5, random_state=42)
+classifier = SVC(kernel='rbf', gamma='scale', C=5, random_state=42)
 classifier.fit(X_train, y_train)
 
 y_pred = classifier.predict(X_test)
