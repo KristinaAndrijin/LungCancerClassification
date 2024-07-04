@@ -10,7 +10,7 @@ from sklearn.metrics import confusion_matrix
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.impute import KNNImputer, SimpleImputer
+from sklearn.impute import SimpleImputer
 
 
 df = pd.read_csv('lung_cancer_data.csv')
@@ -74,23 +74,28 @@ other_columns = [
     # "Survival_Months",
     # "Ethnicity",
     "Insurance_Type",
-    # "Family_History"
+    # "Family_History",
+    # "Performance_Status",	
+    # "Blood_Pressure_Systolic",	
+    # "Blood_Pressure_Diastolic",
+    # "Blood_Pressure_Pulse"
+
 ]
 df=df.drop(other_columns, axis=1)
 
 X = df.drop('Stage', axis=1)
-imputer = KNNImputer(n_neighbors=10)
+imputer = SimpleImputer(strategy="mean")
 imputer.fit(X)
 X = imputer.transform(X)
 y = df['Stage']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# scaler = StandardScaler()
-# X_train = scaler.fit_transform(X_train)
-# X_test = scaler.transform(X_test)
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
 
-# pca = PCA(n_components=20)
+# pca = PCA(n_components=0.9)
 # X_train = pca.fit_transform(X_train)
 # X_test = pca.transform(X_test)
 print(np.shape(X_train))  
