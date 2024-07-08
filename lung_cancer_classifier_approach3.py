@@ -1,13 +1,11 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.preprocessing import LabelEncoder, StandardScaler
-from sklearn.ensemble import RandomForestClassifier, VotingClassifier
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, f1_score, confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-# Load data
 df = pd.read_csv('lung_cancer_data.csv')
 
 categorical_columns = ['Gender', 'Smoking_History', 'Tumor_Location', 'Stage', 'Treatment',
@@ -32,25 +30,29 @@ scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
-best_dt_params = {'max_depth': 30, 'min_samples_leaf': 1, 'min_samples_split': 5}
-best_knn_params = {'n_neighbors': 10, 'weights': 'distance'}
-best_svm_params = {'C': 5, 'gamma': 'scale', 'kernel': 'rbf'}
+best_rf_params = {'max_depth': 20,
+                  'min_samples_leaf': 2,
+                  'min_samples_split': 10,
+                  'n_estimators': 100}
 
-clf1 = DecisionTreeClassifier(**best_dt_params)
-clf2 = KNeighborsClassifier(**best_knn_params)
-clf3 = SVC(**best_svm_params, probability=True)
+rf_classifier = RandomForestClassifier(random_state=42, **best_rf_params)
 
-base_estimators = [('dt', clf1), ('knn', clf2), ('svm', clf3)]
+rf_classifier.fit(X_train_scaled, y_train)
 
-voting_clf = VotingClassifier(estimators=base_estimators, voting='soft')
+y_pred = rf_classifier.predict(X_test_scaled)
 
-voting_clf.fit(X_train_scaled, y_train)
-
-y_pred = voting_clf.predict(X_test_scaled)
-
-print("Voting Classifier with Grid Search Parameters:")
+print("\nClassification Report:")
 print(classification_report(y_test, y_pred))
 macro_f1 = f1_score(y_test, y_pred, average='macro')
 print(f"Macro F1 Score: {macro_f1}")
+
 print("\nConfusion Matrix:")
-print(confusion_matrix(y_test, y_pred))
+cm = confusion_matrix(y_test, y_pred)
+print(cm)
+
+plt.figure(figsize=(10, 7))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=label_encoders['Stage'].classes_, yticklabels=label_encoders['Stage'].classes_)
+plt.xlabel('Predicted')
+plt.ylabel('Actual')
+plt.title('Confusion Matrix')
+plt.show()
